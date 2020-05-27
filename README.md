@@ -1,6 +1,6 @@
 # Influences of luminance contrast and ambient lighting on visual context learning and retrieval
 
-Xuelian Zang, Lingyun Huang, Hermann J. Müller, Zhuanghua Shi
+Xuelian Zang, Lingyun Huang, Xiuna Zhu, Hermann J. Müller, Zhuanghua Shi
 
 ## Abstract
 
