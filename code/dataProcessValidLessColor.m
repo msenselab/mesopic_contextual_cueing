@@ -34,25 +34,42 @@ try
         RTContrast = grpstats(  RTContrastEp1Spss, {'contrast'},{'mean','sem'},'DataVars','mean_RT');
         dataOut.RTContrast = [dataOut.RTContrast; [RTContrast.mean_mean_RT, RTContrast.sem_mean_RT] ];
         % calculate mean RTs for each condition
-        dataOut.(fieldName).RT = calMeanOfConditions(dataCurr.RT, dataCurr.NSub, dataCurr.New, dataCurr.NE, nSub, nEp, nEpT, titleIn);
+        dataOut.(fieldName).RT = calMeanOfConditions(dataCurr.RT, dataCurr.NSub, dataCurr.New, dataCurr.NE, nSub);
         %CC.(fieldName) = dataOut.(fieldName).RT.spssArray(:,7:12)-dataOut.(fieldName).RT.spssArray(:,1:6) ;
         CC.(fieldName) = double(dataOut.(fieldName).RT.CCArrayNorm );
     end
-  
-    % Figure 3 plot Mean RTs, with associated standard errors
-    plotRTWithEpoch(dataOut, nEp,nEpT);
     
-    % Figure 4 plot the Change of CC from the training to the test session
-    plotFig4(CC, nExp);
+    %%plot mean RTs and changes of CC together
+    plotRTandCC(dataOut, nEp,nEpT,CC, nExp);
     
 catch ME
     disp(ME.message);
 end
 end
 
-%% TODO the function need to be rewritten
-% define a function to plot the Change of CC from the training to the test session
-function plotFig4(CC, nExp)
+
+function subBarPlot(plotData, barColor, figTitle, xTicksIn)
+barWidth= 0.35;
+%exp 1
+subplot(1,3,3); hold on;
+bar([1], plotData(1,1),  barWidth,'FaceColor',barColor(1,:));
+bar([2], plotData(2,1),  barWidth,'FaceColor',barColor(2,:));
+
+for i = 1:length(plotData(:,1))
+    errorbar(i, plotData(i,1), plotData(i,2), 'k', 'linewidth',2);
+end
+ylabel('Change of CC (%)');
+xticks([1:2]);
+title(figTitle);
+xticklabels( {xTicksIn(1,:), xTicksIn(2,:)});
+xlim([0.7 2.3]);
+%     set(gca,'XTickLabelRotation',15);
+%     xlabel(xlabelIn);
+hold off;
+end
+
+function plotRTandCC(dataOut, nEp, nEpT,CC, nExp)
+%% calculate contextual cueing index
 meanArray = [];
 for iExp = 1:nExp
     fieldName = ['p' num2str(iExp)];
@@ -60,81 +77,90 @@ for iExp = 1:nExp
     CCDiff = 100.*(CC.(fieldName)(:,6) - CC.(fieldName)(:,5));
     meanArray = [meanArray; [mean(CCDiff) std(CCDiff)/sqrt(length(CCDiff))]];
 end
-
-barWidth= 0.35;
-figure(); hold on;
-
-bar([1, 3], meanArray([1,3],1),  barWidth,'FaceColor',[0.2 0.2 0.2]);
-bar([2, 4], meanArray([2,4],1),  barWidth,'FaceColor',[0.5 0.5 0.5]);
-bar([5, 6], meanArray([5,6],1),  0.6,'FaceColor',[0.8 0.8 0.8]);
-for i = 1:length(meanArray)
-    errorbar(i, meanArray(i,1), meanArray(i,2), 'k', 'linewidth',2);
-end
-
-ylabel('Change of CC (ms)');
-xticks([1:6]);
-xticklabels( {'Exp.1 Photopic H2L', 'Exp.2 Photopic L2H','Exp.3 Mesopic H2L','Exp.4 Mesopic L2H', 'Exp.5 HC-M2P', 'Exp.6 LC-M2P'});
-set(gca,'XTickLabelRotation',-35);
-legend( {'H2L', 'L2H', 'M2P'},'Location','Southoutside', 'Orientation', 'horizontal');
-legend('boxoff');
-text(-1.1, -385, 'Transfer');
-text(1.52, 380, 'p=.019');
-text(3.45, 350, 'p=.002');
-hold off;
-end
-
-
-
-
-
-function plotRTWithEpoch(dataOut,  nEp, nEpT)
-figure(), hold on;
-set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.9]);
-
-
+barColor = [0.6 0.6 0.6; 0.4 0.4 0.4];
 markerSZ = 4;
 lineWd = 0.8;
 offset = 0.3 ;
-
-ylimArry = [0.9 4.8];
-xlimArry = [0 6.8];
-
-subplotMRT(xlimArry, ylimArry, dataOut.p1.RT, 1, 'Exp.1 Photopic H2L', offset,nEp,nEpT, lineWd, markerSZ);
-subplotMRT(xlimArry, ylimArry, dataOut.p2.RT, 2, 'Exp.2 Photopic L2H', offset,nEp,nEpT, lineWd, markerSZ);
-subplotMRT(xlimArry, ylimArry, dataOut.p3.RT, 3, 'Exp.3 Mesopic H2L', offset,nEp,nEpT, lineWd, markerSZ);
-subplotMRT(xlimArry, ylimArry, dataOut.p4.RT, 4, 'Exp.4 Mesopic L2H', offset,nEp,nEpT, lineWd, markerSZ);
-subplotMRT(xlimArry, ylimArry, dataOut.p5.RT, 5, 'Exp.5 HC-M2P', offset,nEp,nEpT, lineWd, markerSZ);
-subplotMRT(xlimArry, ylimArry, dataOut.p6.RT, 6, 'Exp.6 LC-M2P', offset,nEp,nEpT, lineWd, markerSZ);
-
+xlimArry = [0 8.5];
+txtLoc = [1.3, 1.2; 5.25,1.2,];
+%% plot RT of the firt Exp
+figure(), hold on;
+set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.5]);
+ylimArry = [1 4];
+subplotMRT(xlimArry, ylimArry, dataOut.p1.RT, 1, '(A)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1A'); %Exp.1A Photopic H2L
+subplotMRT(xlimArry, ylimArry, dataOut.p2.RT, 2, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1B'); %Exp.1B Photopic L2H
+subBarPlot(meanArray(1:2,:), barColor,'(C)',['Exp.1A';'Exp.1B']);
+saveas(gcf,'../figures/fig3_exp1.png')
 hold off;
+
+
+
+
+figure(), hold on;
+set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.5]);
+ylimArry = [1 4];
+%     txtLoc(:,2) =  txtLoc(:,2) - 0.2;
+subplotMRT(xlimArry, ylimArry, dataOut.p3.RT, 3, '(A)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2A'); %Exp.2A  Mesopic H2L
+subplotMRT(xlimArry, ylimArry, dataOut.p4.RT, 4, '(B)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2B'); %Exp.2B  Mesopic L2H
+subBarPlot(meanArray(3:4,:), barColor,'(C)',['Exp.2A';'Exp.2B']);
+saveas(gcf,'../figures/fig4_exp2.png')
+hold off;
+
+
+figure(), hold on;
+set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.5]);
+ylimArry = [1 4.6];
+txtLoc(:,2) =  txtLoc(:,2) - 0.1;
+subplotMRT(xlimArry, ylimArry, dataOut.p5.RT, 5, '(A)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc,  'Exp.3A'); %Exp.3A HC-M2P
+subplotMRT(xlimArry, ylimArry, dataOut.p6.RT, 6, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.3B'); %Exp.3B LC-M2P
+subBarPlot(meanArray(5:6,:), barColor,'(C)',['Exp.3A';'Exp.3B']);
+saveas(gcf,'../figures/fig5_exp3.png')
+hold off;
+
+
 end
 
 
-function subplotMRT(xlimArry, ylimArry, DataIn, FigNum, titleName, offset,nEp,nEpT, lineWd, markerSZ)
-   subplot(2,3,FigNum); hold on;
-  
-       errorbar(1:nEp, DataIn.m(1:nEp), DataIn.e(1:nEp),'ko-',  'linewidth', lineWd,'MarkerSize',markerSZ);
-       errorbar((1:nEp)+offset, DataIn.m(nEp+nEpT+1:end-1), DataIn.e(nEp+nEpT+1:end-1),'k^-' , 'linewidth', lineWd,'MarkerSize', markerSZ);
-       errorbar(nEp+1, DataIn.m(nEp+nEpT), DataIn.e(nEp+nEpT),'ko-', 'linewidth', lineWd,'MarkerSize',markerSZ);
-       errorbar((nEp+1)+offset, DataIn.m(end), DataIn.e(end),'k^-', 'linewidth', lineWd,'MarkerSize',markerSZ);
 
-       if FigNum == 1
-            legend('old','new');
-       end
+function subplotMRT(xlimArry, ylimArry, DataIn, FigNum, titleName, offset,nEp,nEpT, lineWd, markerSZ,txtLoc, expName)
 
-       if FigNum == 1 || FigNum == 4
-             ylabel('Reaction times (secs)');
-       end
+darkColor = [0.5 0.5 0.5];
+brightColor = [0.95 0.95 0.95];
+leftFig = mod(FigNum-1,2)+1;
+%separate training and test session in the figure
+testRightShift = 0.6;
+trainLeftShift = -0.4;
+subplot(1,3, leftFig); hold on;
+if FigNum <= 2
+    set(gca,'Color',brightColor);
+elseif FigNum <= 4
+    set(gca,'Color',darkColor);
+else
+    set(gca,'Color', darkColor);
+    rectangle('Position',[5.3,1,3.2,3.6],'Curvature', [0 0], 'FaceColor',brightColor);
+end
 
-        if FigNum == 5
-            xlabel('epoch');
-        end
-       set(gca,'xLim',[xlimArry]);  
-       set(gca,'xTick',[1:1:6]);
-       set(gca,'yLim',ylimArry);    
-       title(titleName);
-       hold off;
-           
+errorbar( (1:nEp)+trainLeftShift, DataIn.m(1:nEp), DataIn.e(1:nEp),'ko-',  'linewidth', lineWd,'MarkerSize',markerSZ);
+errorbar((1:nEp)+offset+trainLeftShift, DataIn.m(nEp+nEpT+1:end-1), DataIn.e(nEp+nEpT+1:end-1),'k^-' , 'linewidth', lineWd,'MarkerSize', markerSZ);
+errorbar(nEp+1+testRightShift, DataIn.m(nEp+nEpT), DataIn.e(nEp+nEpT),'ko-', 'linewidth', lineWd,'MarkerSize',markerSZ);
+errorbar((nEp+1+testRightShift)+offset, DataIn.m(end), DataIn.e(end),'k^-', 'linewidth', lineWd,'MarkerSize',markerSZ);
+
+ylab = ['Reaction times (secs)'];
+if(~isempty(expName))
+    ylab = ['Reaction times in ' expName ' (secs)'];
+end
+ylabel(ylab);
+xlabel('Epoch');
+text(txtLoc(1,1), txtLoc(1,2), 'Training', 'Color', [.0 .0 .0]);
+text(txtLoc(2,1), txtLoc(2,2), 'Transfer', 'Color',[.0 .0 .0]);
+
+set(gca,'xLim',[xlimArry]);
+xticks([(1:5)+trainLeftShift 6+testRightShift]);
+xticklabels( {'1', '2','3','4', '5', '6'});
+set(gca,'yLim',ylimArry);
+title([titleName]);
+hold off;
+
 end
 
 

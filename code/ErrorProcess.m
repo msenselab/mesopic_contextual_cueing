@@ -27,7 +27,7 @@ for iExp = 1:nExp
     out.errRTTradeOff.(fieldName)  = speedAccuracyTradeOff( dataAllCurr, dataErrCurr, subNum);
     plot(1 : 4,  mean(out.errRTTradeOff.(fieldName) ) ,  lineType(iExp,:) ,'linewidth', 1.5);
 end
-legend('Exp.1', 'Exp.2', 'Exp.3', 'Exp.4' , 'Exp.5', 'Exp.6');
+legend('Exp.1A', 'Exp.1B', 'Exp.2A', 'Exp.2B' , 'Exp.3A', 'Exp.3B');
 legend('Location', 'NorthWest');
 legend('boxoff');
 xlabel('The four quartile regions of RTs');
@@ -37,7 +37,7 @@ set(gca,'xLim',[0.5 4.5]);
 set(gca,'xTick',[1:4]);
 set(gca,'xTicklabel', [' < Q1' ; 'Q1-Q2' ; 'Q2-Q3' ; ' > Q3'] );
 hold off;
-
+saveas(gcf,'../figures/fig2_error.png')
 end
 
 function errRTTradeOff  = speedAccuracyTradeOff(dataValid, dataErr,  subNum)

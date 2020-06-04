@@ -4,7 +4,7 @@
 %Description:         calculate the mean of the data (e.g., RT, dFix, nFix)
 %with context and epoch as factors
 %Date:                07/07/2014 
-function out = calMeanOfConditions(DependFactor, factor1, factor2, factor3,  nSub, nEp, nEpT, titleIn)
+function out = calMeanOfConditions(DependFactor, factor1, factor2, factor3,  nSub)
 
    
 %dataN.RTSpssArray: o1e1 o1e2 o1e3...

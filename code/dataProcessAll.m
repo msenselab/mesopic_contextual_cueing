@@ -23,15 +23,14 @@ try
     load('ErrData');
     load('RecData');
     load('DisData');
-    
-
+   
     
     % plot Mean error rates as a function of RT quartile subset(Figure 2)
     nEpAll = nEp + nEpT;
-    ErrorProcess(dataAll, dataErr, nEpAll, nExp, subNum);
+    errOut = ErrorProcess(dataAll, dataErr, nEpAll, nExp, subNum);
     
     % process the valid data and plot Figure 3 and Figure 4
-    dataProcessValidLessColor(dataAll, subNum, nEp, nEpT, nExp);
+    dataOut = dataProcessValidLessColor(dataAll, subNum, nEp, nEpT, nExp);
     
     % recognition test and plot Figure 6 
     dataProcessRec(dataRec, subNum, nExp,nEpT);

@@ -137,8 +137,13 @@ function  dataProcessRec(dataIn, nSub, nEp,nEpT)
     end
     ylabel("Recognition sensitivity (d')");
     xlim([0.5 6.5]);
-    xlabel('Experiment');
+%     xlabel('Experiment');
+    xticks([1:6]);
+    xticklabels({'Exp.1A', 'Exp.1B','Exp.2A', 'Exp.2B', 'Exp.3A', 'Exp.3B'});
+    set(gca,'XTickLabelRotation',70);
+    title('(A)');
     hold off;
+    
     
     subplot(1,2,2); hold on;
     bar([1;3;5], tmp.mean_c([1,3,5]), barWidth,'FaceColor',[0 0 0]);
@@ -157,9 +162,16 @@ function  dataProcessRec(dataIn, nSub, nEp,nEpT)
     end
     legend('High Contrast', 'Low Contrast', 'Mesopic');
     ylabel("Recognition bias (c)");
-    xlabel('Experiment');
     xlim([0.5 6.5]);
     ylim([-0.4 0.1]);
+    
+    xticks([1:6]);
+    xticklabels({'Exp.1A', 'Exp.1B','Exp.2A', 'Exp.2B', 'Exp.3A', 'Exp.3B'});
+    set(gca,'XTickLabelRotation',70);
+    title('(B)');
+    saveas(gcf,'../figures/fig6_responsebias.png')
     hold off;
+    
+end
   
   
