@@ -82,13 +82,14 @@ markerSZ = 4;
 lineWd = 0.8;
 offset = 0.3 ;
 xlimArry = [0 8.5];
-txtLoc = [1.3, 1.2; 5.25,1.2,];
+%txtLoc = [1.3, 1.2; 5.25,1.2,];
+txtLoc = [1.3, 1.1; 5.25, 1.1];
 %% plot RT of the firt Exp
 figure(), hold on;
 set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.5]);
-ylimArry = [1 4];
-subplotMRT(xlimArry, ylimArry, dataOut.p1.RT, 1, '(A)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1A'); %Exp.1A Photopic H2L
-subplotMRT(xlimArry, ylimArry, dataOut.p2.RT, 2, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1B'); %Exp.1B Photopic L2H
+ylimArry = [0.8 4];
+subplotMRT(xlimArry, ylimArry, dataOut.p1.RT, 1, '(A)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1A', 'HC', 'LC', '', ''); %Exp.1A Photopic H2L
+subplotMRT(xlimArry, ylimArry, dataOut.p2.RT, 2, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1B', 'LC', 'HC', '', ''); %Exp.1B Photopic L2H
 subBarPlot(meanArray(1:2,:), barColor,'(C)',['Exp.1A';'Exp.1B']);
 saveas(gcf,'../figures/fig3_exp1.png')
 hold off;
@@ -98,10 +99,10 @@ hold off;
 
 figure(), hold on;
 set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.5]);
-ylimArry = [1 4];
+ylimArry = [0.8 4];
 %     txtLoc(:,2) =  txtLoc(:,2) - 0.2;
-subplotMRT(xlimArry, ylimArry, dataOut.p3.RT, 3, '(A)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2A'); %Exp.2A  Mesopic H2L
-subplotMRT(xlimArry, ylimArry, dataOut.p4.RT, 4, '(B)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2B'); %Exp.2B  Mesopic L2H
+subplotMRT(xlimArry, ylimArry, dataOut.p3.RT, 3, '(A)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2A', 'HC', 'LC', 'light', 'light'); %Exp.2A  Mesopic H2L
+subplotMRT(xlimArry, ylimArry, dataOut.p4.RT, 4, '(B)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2B', 'LC', 'HC', 'light', 'light'); %Exp.2B  Mesopic L2H
 subBarPlot(meanArray(3:4,:), barColor,'(C)',['Exp.2A';'Exp.2B']);
 saveas(gcf,'../figures/fig4_exp2.png')
 hold off;
@@ -109,10 +110,10 @@ hold off;
 
 figure(), hold on;
 set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.5]);
-ylimArry = [1 4.6];
-txtLoc(:,2) =  txtLoc(:,2) - 0.1;
-subplotMRT(xlimArry, ylimArry, dataOut.p5.RT, 5, '(A)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc,  'Exp.3A'); %Exp.3A HC-M2P
-subplotMRT(xlimArry, ylimArry, dataOut.p6.RT, 6, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.3B'); %Exp.3B LC-M2P
+ylimArry = [0.8 4.6];
+txtLoc(:,2) =  txtLoc(:,2);
+subplotMRT(xlimArry, ylimArry, dataOut.p5.RT, 5, '(A)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.3A', 'HC', 'HC', 'light', ''); %Exp.3A HC-M2P
+subplotMRT(xlimArry, ylimArry, dataOut.p6.RT, 6, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.3B', 'HC', 'HC', 'light', ''); %Exp.3B LC-M2P
 subBarPlot(meanArray(5:6,:), barColor,'(C)',['Exp.3A';'Exp.3B']);
 saveas(gcf,'../figures/fig5_exp3.png')
 hold off;
@@ -122,10 +123,11 @@ end
 
 
 
-function subplotMRT(xlimArry, ylimArry, DataIn, FigNum, titleName, offset,nEp,nEpT, lineWd, markerSZ,txtLoc, expName)
+function subplotMRT(xlimArry, ylimArry, DataIn, FigNum, titleName, offset,nEp,nEpT, lineWd, markerSZ,txtLoc, expName, trainingTxt, transferTxt, trainingColor, transferColor)
 
 darkColor = [0.5 0.5 0.5];
 brightColor = [0.95 0.95 0.95];
+whiteColor = [1 1 1];
 leftFig = mod(FigNum-1,2)+1;
 %separate training and test session in the figure
 testRightShift = 0.6;
@@ -137,13 +139,23 @@ elseif FigNum <= 4
     set(gca,'Color',darkColor);
 else
     set(gca,'Color', darkColor);
-    rectangle('Position',[5.3,1,3.2,3.6],'Curvature', [0 0], 'FaceColor',brightColor);
+    rectangle('Position',[5.3, 0.1, 3.3, 4.7],'Curvature', [0 0], 'FaceColor',brightColor);
 end
 
-errorbar( (1:nEp)+trainLeftShift, DataIn.m(1:nEp), DataIn.e(1:nEp),'ko-',  'linewidth', lineWd,'MarkerSize',markerSZ);
-errorbar((1:nEp)+offset+trainLeftShift, DataIn.m(nEp+nEpT+1:end-1), DataIn.e(nEp+nEpT+1:end-1),'k^-' , 'linewidth', lineWd,'MarkerSize', markerSZ);
-errorbar(nEp+1+testRightShift, DataIn.m(nEp+nEpT), DataIn.e(nEp+nEpT),'ko-', 'linewidth', lineWd,'MarkerSize',markerSZ);
-errorbar((nEp+1+testRightShift)+offset, DataIn.m(end), DataIn.e(end),'k^-', 'linewidth', lineWd,'MarkerSize',markerSZ);
+errbarTrainColor = [0 0 0];
+if(strcmp(trainingColor,'light'))
+    errbarTrainColor = [0.15 0.15 0.15];
+end
+
+errbarTransferColor = [0 0 0];
+if(strcmp(transferColor,'light'))
+    errbarTransferColor = [0.15 0.15 0.15];
+end
+
+errorbar((1:nEp)+trainLeftShift, DataIn.m(1:nEp), DataIn.e(1:nEp),'o-', 'color', errbarTrainColor,  'linewidth', lineWd,'MarkerSize',markerSZ);
+errorbar((1:nEp)+offset+trainLeftShift, DataIn.m(nEp+nEpT+1:end-1), DataIn.e(nEp+nEpT+1:end-1),'^-', 'color', errbarTrainColor, 'linewidth', lineWd,'MarkerSize', markerSZ);
+errorbar(nEp+1+testRightShift, DataIn.m(nEp+nEpT), DataIn.e(nEp+nEpT),'o-', 'color', errbarTransferColor, 'linewidth', lineWd,'MarkerSize',markerSZ);
+errorbar((nEp+1+testRightShift)+offset, DataIn.m(end), DataIn.e(end),'^-', 'color', errbarTransferColor, 'linewidth', lineWd,'MarkerSize',markerSZ);
 
 ylab = ['Reaction times (secs)'];
 if(~isempty(expName))
@@ -153,6 +165,8 @@ ylabel(ylab);
 xlabel('Epoch');
 text(txtLoc(1,1), txtLoc(1,2), 'Training', 'Color', [.0 .0 .0]);
 text(txtLoc(2,1), txtLoc(2,2), 'Transfer', 'Color',[.0 .0 .0]);
+text(txtLoc(1,1)+1, txtLoc(1,2)-0.2, trainingTxt, 'Color', [.0 .0 .0]);
+text(txtLoc(2,1)+1, txtLoc(2,2)-0.2, transferTxt, 'Color',[.0 .0 .0]);
 
 set(gca,'xLim',[xlimArry]);
 xticks([(1:5)+trainLeftShift 6+testRightShift]);
