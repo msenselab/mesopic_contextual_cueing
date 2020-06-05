@@ -91,8 +91,8 @@ ylimArry = [0.8 4];
 subplotMRT(xlimArry, ylimArry, dataOut.p1.RT, 1, '(A)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1A', 'HC', 'LC', '', ''); %Exp.1A Photopic H2L
 subplotMRT(xlimArry, ylimArry, dataOut.p2.RT, 2, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.1B', 'LC', 'HC', '', ''); %Exp.1B Photopic L2H
 subBarPlot(meanArray(1:2,:), barColor,'(C)',['Exp.1A';'Exp.1B']);
-saveas(gcf,'../figures/fig3_exp1.png')
 hold off;
+%saveas(gcf,'../figures/fig3_exp1.png')
 
 
 
@@ -104,8 +104,8 @@ ylimArry = [0.8 4];
 subplotMRT(xlimArry, ylimArry, dataOut.p3.RT, 3, '(A)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2A', 'HC', 'LC', 'light', 'light'); %Exp.2A  Mesopic H2L
 subplotMRT(xlimArry, ylimArry, dataOut.p4.RT, 4, '(B)', offset,nEp,nEpT, lineWd, markerSZ,txtLoc, 'Exp.2B', 'LC', 'HC', 'light', 'light'); %Exp.2B  Mesopic L2H
 subBarPlot(meanArray(3:4,:), barColor,'(C)',['Exp.2A';'Exp.2B']);
-saveas(gcf,'../figures/fig4_exp2.png')
 hold off;
+%saveas(gcf,'../figures/fig4_exp2.png')
 
 
 figure(), hold on;
@@ -113,10 +113,10 @@ set(gcf,'Units','inches','Position',[6 0.5 6.83 6.83*0.5]);
 ylimArry = [0.8 4.6];
 txtLoc(:,2) =  txtLoc(:,2);
 subplotMRT(xlimArry, ylimArry, dataOut.p5.RT, 5, '(A)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.3A', 'HC', 'HC', 'light', ''); %Exp.3A HC-M2P
-subplotMRT(xlimArry, ylimArry, dataOut.p6.RT, 6, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.3B', 'HC', 'HC', 'light', ''); %Exp.3B LC-M2P
+subplotMRT(xlimArry, ylimArry, dataOut.p6.RT, 6, '(B)', offset,nEp,nEpT, lineWd, markerSZ, txtLoc, 'Exp.3B', 'LC', 'LC', 'light', ''); %Exp.3B LC-M2P
 subBarPlot(meanArray(5:6,:), barColor,'(C)',['Exp.3A';'Exp.3B']);
-saveas(gcf,'../figures/fig5_exp3.png')
 hold off;
+%saveas(gcf,'../figures/fig5_exp3.png')
 
 
 end

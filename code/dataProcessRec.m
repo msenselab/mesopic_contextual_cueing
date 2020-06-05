@@ -169,8 +169,8 @@ function  dataProcessRec(dataIn, nSub, nEp,nEpT)
     xticklabels({'Exp.1A', 'Exp.1B','Exp.2A', 'Exp.2B', 'Exp.3A', 'Exp.3B'});
     set(gca,'XTickLabelRotation',70);
     title('(B)');
-    saveas(gcf,'../figures/fig6_responsebias.png')
     hold off;
+    %saveas(gcf,'../figures/fig6_responsebias.png')
     
 end
   

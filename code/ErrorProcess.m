@@ -37,7 +37,7 @@ set(gca,'xLim',[0.5 4.5]);
 set(gca,'xTick',[1:4]);
 set(gca,'xTicklabel', [' < Q1' ; 'Q1-Q2' ; 'Q2-Q3' ; ' > Q3'] );
 hold off;
-saveas(gcf,'../figures/fig2_error.png')
+%saveas(gcf,'../figures/fig2_error.png')
 end
 
 function errRTTradeOff  = speedAccuracyTradeOff(dataValid, dataErr,  subNum)
